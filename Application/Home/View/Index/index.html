@@ -1,0 +1,96 @@
+<include file="header" />
+
+<div id="article" class="wraper">
+	<volist id="info" name="dv">
+	<div class="userFull animated bounceInRight">
+	<div class="userCard">
+		<div class="userCardLeft">
+			<img src="__PUBLIC__/img/1.jpg" alt="">
+			<p><i></i><span>距32m</span></p>
+		</div>
+		<div class="userCardRight">
+			<div class="ucr_a">{$info.username}</div>
+			<div class="ucr_b">{$info.company}</div>
+			<div class="ucr_c">{$info.job}</div>
+			<div class="ucr_d"><i></i><span>创业者</span><span>互联网</span></div>
+		</div>
+		<div class="userCardTip"><img src="__PUBLIC__/img/tips/t{$info.ustatus}.png" alt=""></div>
+	</div>
+	<div class="userInfo hammer" id="">
+		<volist name="info.info" id="v">
+			<if condition="$i eq 1"><div class="userInfo_num animated dq_num"><else /><div class="userInfo_num animated"></if>
+			<div class="userInfo_h">{$v.title}</div>
+			<div class="userInfo_m"><if condition="$v['type'] eq 1">{$v.content}<else /><img src="__PUBLIC__/Uploads/{$v.content}"></if></div>
+		</div>
+		</volist>
+	</div>
+	<div class="userOs">
+		<div class="userOst"><volist name="info.info" id="vs"><if condition="$i eq 1"><span class="userOstn userOstnfos"></span><else /><span class="userOstn"></span></if></volist></div>
+		<div class="userOsb"><a class="userOsb_ps" href="javascript:void(0);">不想见</a><a class="userOsb_cg" href="javascript:void(0);">换名片</a></div>
+	</div>
+	</div>
+	</volist>
+</div>
+
+<include file="footer" />
+<script type="text/javascript">
+$(function(){
+	$('.userFull').eq(0).show();
+	var H = $(window).height();
+	var s = $('.userInfo').offset().top;
+	$('.userInfo').css("height",H-s-153);
+	$('.userInfo_m').css("height",H-s-193);
+	
+	var hammertime = $('.hammer').hammer();
+	hammertime.on('swiperight', function(ev){
+		var num = $(this).children('.userInfo_num').length;
+		if(num==1){return false;}
+		$('.userInfo_num').each(function(){
+			if($(this).hasClass('dq_num')){
+				var i = $(this).index();
+				var idx = i - 1;
+				if(i==0){
+					idx = num - 1;
+				}
+				$('.userInfo_num').eq(idx).addClass('dq_num').addClass('bounceInLeft');
+				$('.userOstn').eq(idx).addClass('userOstnfos');
+				$('.userInfo_num').eq(i).removeClass('dq_num bounceInLeft bounceInRight');
+				$('.userOstn').eq(i).removeClass('userOstnfos');
+				return false;
+			}
+		});
+	});
+	hammertime.on('swipeleft', function(ev){
+		var num = $(this).children('.userInfo_num').length;
+		if(num==1){return false;}
+		$('.userInfo_num').each(function(){
+			if($(this).hasClass('dq_num')){
+				var i = $(this).index();
+				var idx = i + 1;
+				if(idx == num){
+					idx = 0;
+				}
+				$('.userInfo_num').eq(idx).addClass('dq_num').addClass('bounceInRight');
+				$('.userOstn').eq(idx).addClass('userOstnfos');
+				$('.userInfo_num').eq(i).removeClass('dq_num bounceInRight bounceInLeft');
+				$('.userOstn').eq(i).removeClass('userOstnfos');
+				return false;
+			}
+		});
+	});
+
+	$('.userOsb_ps').click(function(){
+		var first = 0;
+		$('.userFull').eq(first).addClass('bounceOutLeft').fadeOut(600,function(){
+			$(this).remove();
+		});
+		first++;
+		var l = $('.userFull').length;
+		if(l==1){
+			window.location.reload();
+		}
+		$('.userFull').eq(first).show().addClass('bounceInRight');
+	});
+	
+});
+</script>
